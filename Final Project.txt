@@ -1,1 +1,1 @@
-For my final project I am planning to make a hangman game, or a word guessing game. 
+For my final project I am planning to make a hangman game, or a word guessing game. I am going to code with the things that I had learned during the introduction to programming class with the C++ language. In the game, the words that the player will have to guess will be random, and they will get hints such as how many words. If possible, I might also add hints that will make the player easier when they guess the word. 
