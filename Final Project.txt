@@ -1,0 +1,1 @@
+For my final project I am planning to make a hangman game, or a word guessing game. 
