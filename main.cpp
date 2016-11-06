@@ -6,105 +6,119 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <ctime> //Using csdtdlib and ctime so that the words will always be randomized
 using namespace std;
 
-const int maxTries = 6;
-int letterFill (char, string, string&);
+
+int letterFill (char wordGuess, string unknownWord, string &guessword); // The function that will be used after the main function
 
 int main()
 {
     string start;
-    char letter = '\0';
-    string correctWord;
-    string wrongWord;
-    int numberOfWrongGuess = 0;
-    string words[] =
+    const int numberOfTries = 6; // The maximum number of tries
+    char letter;
+    int wrongLetter;
+    int remainingTries;
+    string guessWord;
+    //The words that the player needs to guess was inside the array
+    string wordArr[23] =
     {
-        "Alpaca",
-        "Butterfly",
-        "Crocodile",
-        "Crow",
-        "Gazelle",
-        "Hamster",
-        "Lizard",
-        "Hippopotamus",
-        "Kangaroo",
-        "Leopard",
-        "Mongoose",
-        "Tiger",
-        "Lion",
-        "Cheetah",
-        "Panther",
-        "Mouse",
-        "Armadillo",
-        "Rhinoceros",
-        "Giraffe",
-        "Sloth",
-        "Otter",
-        "Hyena"
+        "alpaca",
+        "butterfly",
+        "crocodile",
+        "crow",
+        "gazelle",
+        "hamster",
+        "lizard",
+        "hippopotamus",
+        "kangaroo",
+        "leopard",
+        "mongoose",
+        "tiger",
+        "lion",
+        "cheetah",
+        "panther",
+        "mouse",
+        "armadillo",
+        "rhinoceros",
+        "giraffe",
+        "sloth",
+        "otter",
+        "hyena"
     };
     
-    int n=rand()%10; //The words appear will be random
-    correctWord=words[n];
-    string unknownWord(correctWord.length(), '_' ); //To replace the unkown words with _
+    //To randomize the words that the player needs to guess
+    srand(time(0));
+    int n=rand()% 23;
+    guessWord=wordArr[n];
+    
+    //The letters will be replaced with _
+    string unknownWord(guessWord.length(),'_');
+    
     
     cout << "                       HANGMAN                     " << endl;
     cout << "                 By: Angeline Indahsi             " << endl;
     cout << "===================================================" << endl;
     cout << endl;
     cout << "Welcome to Hangman! Now try to guess the name of an animal!" << endl;
-    cout << "Type start to start the game" << endl;
+    cout << "You have 6 chances to guess the word. If you have reached 0 chances, you lose!" <<endl;
+    cout << "Press any key then press enter to start the game!" << endl;
     cin >> start;
     
-    while(numberOfWrongGuess < maxTries)
-    {
-        cout << "Guess the letter: " << endl;
-        cout << unknownWord << endl;
-        cin >> letter;
-    }
+    cout << "Guess the name of the animal by entering the letter! Good luck & have fun!" << endl;
     
-    if (letterFill(letter, correctWord, unknownWord)==0)
+    while (wrongLetter < numberOfTries) //Loop until the player win or lose
     {
-        cout << endl << "Sorry, wrong letter!" << endl;
-        numberOfWrongGuess++;
+        cout << unknownWord << endl; //The unknown word represented with underscores will be shown
+        cout << "Enter a letter: ";
+        cin >> letter; //So that the player can input a letter
+        
+        if (letterFill(letter, guessWord, unknownWord)==0) //If the letter guessed is wrong
+        {
+            cout << endl << "Sorry, wrong letter!" << endl;
+            wrongLetter++;
+        }
+        else
+        {
+            cout << endl << "Yay you found a letter! Keep it up!" << endl;
+        }
+        
+        // Remind the user of the remaining chances left before losing
+        remainingTries = numberOfTries - wrongLetter;
+        cout << "You have " << remainingTries << " guesses left." << endl;
+        
+        if (guessWord==unknownWord) //If the player had guessed all of the word right
+        {
+            cout << guessWord << endl;
+            cout << "Congratulations, you won!" << endl;
+            cout << "Thank you for playing hangman!" << endl;
+        }
     }
-    else
+    if(wrongLetter == numberOfTries) //If there's no chances left
     {
-        cout << endl << "You found a letter! Keep it up!" << endl;
-    }
-
-    
-    cout << "You have " << maxTries - numberOfWrongGuess << " guessess left!" << endl;
-    //To count the number of chances left
-    
-    if (correctWord == unknownWord)
-    {
-        cout << correctWord << endl;
-        cout << "Congratulations! You win the game!" << endl;
-    }
-    
-    if (numberOfWrongGuess == maxTries)
-    {
-        cout << "You have been hanged!" << endl;
-        cout << "Sorry you lose!" << endl;
-        cout << "The word is: " << correctWord << endl;
+        cout << "You have been hanged! You lose..." << endl;
+        cout << "The word was : " << guessWord << endl;
+        cout << "Thank you for playing hangman!" << endl;
     }
     cin.get();
+    cin.ignore();
     return 0;
 }
 
-int letterFill (char guess, string secretWord, string &wordGuessed)
+//This function is to determine whether the letter that the player had input is the same or not
+int letterFill (char wordGuess, string unknownWord, string &guessword)
 {
     int i;
     int matched=0;
-    int wordLength=secretWord.length();
-    for (i = 0; i< wordLength; i++)
+    int length=unknownWord.length();
+    for (i = 0; i< length; i++)
     {
-        if (guess == wordGuessed[i])
+        if (wordGuess == guessword[i])
             return 0;
-        if (guess == secretWord[i])
+        if (wordGuess == unknownWord[i])
         {
-            wordGuessed[i] = guess;
+            guessword[i] = wordGuess;
             matched++;
         }
     }
